@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
+import '../main.dart';
 import 'dashboard_overview.dart';
 import 'users_page.dart';
 import 'products_page.dart';
@@ -37,6 +39,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
+    final currentLocale = localeNotifier.value.languageCode;
+
     return Scaffold(
       body: Row(
         children: [
@@ -51,9 +56,30 @@ class _DashboardPageState extends State<DashboardPage> {
             selectedLabelTextStyle: const TextStyle(color: Colors.white),
             unselectedIconTheme: const IconThemeData(color: Colors.white60),
             unselectedLabelTextStyle: const TextStyle(color: Colors.white60),
-            leading: const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Icon(Icons.admin_panel_settings, color: Colors.white, size: 40),
+            leading: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const Icon(Icons.admin_panel_settings, color: Colors.white, size: 40),
+                  const SizedBox(height: 12),
+                  ToggleButtons(
+                    isSelected: [currentLocale == 'ru', currentLocale == 'uz'],
+                    onPressed: (index) {
+                      final newLocale = index == 0 ? const Locale('ru') : const Locale('uz');
+                      localeNotifier.value = newLocale;
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    selectedColor: Colors.white,
+                    fillColor: Colors.white24,
+                    color: Colors.white60,
+                    constraints: const BoxConstraints(minWidth: 36, minHeight: 28),
+                    children: const [
+                      Text('RU', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                      Text('UZ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              ),
             ),
             trailing: Expanded(
               child: Align(
@@ -63,35 +89,35 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: IconButton(
                     icon: const Icon(Icons.logout, color: Colors.white60),
                     onPressed: _logout,
-                    tooltip: 'Logout',
+                    tooltip: t('logout'),
                   ),
                 ),
               ),
             ),
-            destinations: const [
+            destinations: [
               NavigationRailDestination(
-                icon: Icon(Icons.dashboard),
-                label: Text('Dashboard'),
+                icon: const Icon(Icons.dashboard),
+                label: Text(t('dashboard')),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text('Users'),
+                icon: const Icon(Icons.people),
+                label: Text(t('users')),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.inventory),
-                label: Text('Products'),
+                icon: const Icon(Icons.inventory),
+                label: Text(t('products')),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.category),
-                label: Text('Categories'),
+                icon: const Icon(Icons.category),
+                label: Text(t('categories')),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.shopping_cart),
-                label: Text('Orders'),
+                icon: const Icon(Icons.shopping_cart),
+                label: Text(t('orders')),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.notifications),
-                label: Text('Notifications'),
+                icon: const Icon(Icons.notifications),
+                label: Text(t('notifications')),
               ),
             ],
           ),

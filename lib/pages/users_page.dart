@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
@@ -42,6 +43,7 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -50,15 +52,15 @@ class _UsersPageState extends State<UsersPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Users', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(t('users'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               Row(
                 children: [
-                  Text('${_users.length} users', style: const TextStyle(color: Colors.grey)),
+                  Text('${_users.length} ${t('users_count')}', style: const TextStyle(color: Colors.grey)),
                   const SizedBox(width: 16),
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: _loadUsers,
-                    tooltip: 'Refresh',
+                    tooltip: t('refresh'),
                   ),
                 ],
               ),
@@ -73,9 +75,9 @@ class _UsersPageState extends State<UsersPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Error: $_error', style: const TextStyle(color: Colors.red)),
+                    Text('${t('error')}: $_error', style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 16),
-                    ElevatedButton(onPressed: _loadUsers, child: const Text('Retry')),
+                    ElevatedButton(onPressed: _loadUsers, child: Text(t('retry'))),
                   ],
                 ),
               ),
@@ -87,11 +89,11 @@ class _UsersPageState extends State<UsersPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('ID')),
-                        DataColumn(label: Text('Name')),
-                        DataColumn(label: Text('Phone')),
-                        DataColumn(label: Text('Birthday')),
+                      columns: [
+                        DataColumn(label: Text(t('id'))),
+                        DataColumn(label: Text(t('name'))),
+                        DataColumn(label: Text(t('phone'))),
+                        DataColumn(label: Text(t('birthday'))),
                       ],
                       rows: _users.map((user) {
                         return DataRow(cells: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../services/api_service.dart';
 import '../config/api_config.dart';
+import '../l10n/app_localizations.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
@@ -53,7 +54,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+              SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
             );
           }
         },
@@ -73,7 +74,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+              SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
             );
           }
         },
@@ -82,13 +83,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
   }
 
   void _deleteCategory(int id) {
+    final t = AppLocalizations.of(context).translate;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Delete Category'),
-        content: const Text('Are you sure? This will also delete all products in this category.'),
+        title: Text(t('delete_category')),
+        content: Text(t('delete_category_confirm')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(t('cancel'))),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
@@ -98,11 +100,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
               } catch (e) {
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                  SnackBar(content: Text('${t('error')}: $e'), backgroundColor: Colors.red),
                 );
               }
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(t('delete'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -111,6 +113,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -119,17 +122,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Categories', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(t('categories'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               Row(
                 children: [
-                  Text('${_categories.length} categories', style: const TextStyle(color: Colors.grey)),
+                  Text('${_categories.length} ${t('categories_count')}', style: const TextStyle(color: Colors.grey)),
                   const SizedBox(width: 16),
-                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadCategories, tooltip: 'Refresh'),
+                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadCategories, tooltip: t('refresh')),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: _addCategory,
                     icon: const Icon(Icons.add),
-                    label: const Text('Add Category'),
+                    label: Text(t('add_category')),
                   ),
                 ],
               ),
@@ -144,9 +147,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Error: $_error', style: const TextStyle(color: Colors.red)),
+                    Text('${t('error')}: $_error', style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 16),
-                    ElevatedButton(onPressed: _loadCategories, child: const Text('Retry')),
+                    ElevatedButton(onPressed: _loadCategories, child: Text(t('retry'))),
                   ],
                 ),
               ),
@@ -158,12 +161,12 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('ID')),
-                        DataColumn(label: Text('Icon')),
-                        DataColumn(label: Text('Name')),
-                        DataColumn(label: Text('Products')),
-                        DataColumn(label: Text('Actions')),
+                      columns: [
+                        DataColumn(label: Text(t('id'))),
+                        DataColumn(label: Text(t('icon'))),
+                        DataColumn(label: Text(t('name'))),
+                        DataColumn(label: Text(t('products'))),
+                        DataColumn(label: Text(t('actions'))),
                       ],
                       rows: _categories.map((c) {
                         final category = Map<String, dynamic>.from(c);
@@ -268,15 +271,16 @@ class _CategoryDialogState extends State<CategoryDialog> {
       if (!mounted) return;
       setState(() => _uploading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return AlertDialog(
-      title: Text(widget.category == null ? 'Add Category' : 'Edit Category'),
+      title: Text(widget.category == null ? t('add_category') : t('edit_category')),
       content: SizedBox(
         width: 400,
         child: SingleChildScrollView(
@@ -302,27 +306,27 @@ class _CategoryDialogState extends State<CategoryDialog> {
                 child: OutlinedButton.icon(
                   onPressed: _uploading ? null : _pickAndUploadIcon,
                   icon: const Icon(Icons.upload),
-                  label: Text(_iconUrl != null ? 'Change Icon' : 'Upload Icon'),
+                  label: Text(_iconUrl != null ? t('change_icon') : t('upload_icon')),
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Name *')),
+              TextField(controller: _nameController, decoration: InputDecoration(labelText: t('name_required'))),
               const SizedBox(height: 16),
-              TextField(controller: _nameUzController, decoration: const InputDecoration(labelText: 'Name (UZ)')),
+              TextField(controller: _nameUzController, decoration: InputDecoration(labelText: t('name_uz'))),
               const SizedBox(height: 16),
-              TextField(controller: _nameRuController, decoration: const InputDecoration(labelText: 'Name (RU)')),
+              TextField(controller: _nameRuController, decoration: InputDecoration(labelText: t('name_ru'))),
             ],
           ),
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(t('cancel'))),
         ElevatedButton(
           onPressed: () {
             final name = _nameController.text.trim();
             if (name.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Name is required')),
+                SnackBar(content: Text(t('name_is_required'))),
               );
               return;
             }
@@ -336,13 +340,14 @@ class _CategoryDialogState extends State<CategoryDialog> {
             Navigator.pop(context);
             widget.onSave(data);
           },
-          child: const Text('Save'),
+          child: Text(t('save')),
         ),
       ],
     );
   }
 
   Widget _buildIconPreview() {
+    final t = AppLocalizations.of(context).translate;
     // Show picked file bytes
     if (_pickedFile?.bytes != null) {
       return Image.memory(_pickedFile!.bytes!, fit: BoxFit.contain);
@@ -353,22 +358,22 @@ class _CategoryDialogState extends State<CategoryDialog> {
       return Image.network(
         url,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Center(
+        errorBuilder: (_, __, ___) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [Icon(Icons.broken_image, size: 40, color: Colors.grey), Text('Failed to load')],
+            children: [const Icon(Icons.broken_image, size: 40, color: Colors.grey), Text(t('failed_to_load'))],
           ),
         ),
       );
     }
     // No icon
-    return const Center(
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.image, size: 40, color: Colors.grey),
-          SizedBox(height: 8),
-          Text('No icon', style: TextStyle(color: Colors.grey)),
+          const Icon(Icons.image, size: 40, color: Colors.grey),
+          const SizedBox(height: 8),
+          Text(t('no_icon'), style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );

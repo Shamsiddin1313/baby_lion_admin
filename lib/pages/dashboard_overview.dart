@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 
 class DashboardOverview extends StatefulWidget {
   const DashboardOverview({super.key});
@@ -42,6 +43,7 @@ class _DashboardOverviewState extends State<DashboardOverview> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -50,11 +52,11 @@ class _DashboardOverviewState extends State<DashboardOverview> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Dashboard', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(t('dashboard'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: _loadStats,
-                tooltip: 'Refresh',
+                tooltip: t('refresh'),
               ),
             ],
           ),
@@ -67,9 +69,9 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Error: $_error', style: const TextStyle(color: Colors.red)),
+                    Text('${t('error')}: $_error', style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 16),
-                    ElevatedButton(onPressed: _loadStats, child: const Text('Retry')),
+                    ElevatedButton(onPressed: _loadStats, child: Text(t('retry'))),
                   ],
                 ),
               ),
@@ -81,16 +83,16 @@ class _DashboardOverviewState extends State<DashboardOverview> {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _buildStatCard('Total Users', '${_stats!['total_users'] ?? 0}', Icons.people, Colors.blue),
-                  _buildStatCard('Total Products', '${_stats!['total_products'] ?? 0}', Icons.inventory, Colors.green),
-                  _buildStatCard('Total Orders', '${_stats!['total_orders'] ?? 0}', Icons.shopping_cart, Colors.orange),
-                  _buildStatCard('Paid Orders', '${_stats!['paid_orders'] ?? 0}', Icons.attach_money, Colors.purple),
-                  _buildStatCard('Total Deliveries', '${_stats!['total_deliveries'] ?? 0}', Icons.local_shipping, Colors.teal),
-                  _buildStatCard('Delivered', '${_stats!['delivered'] ?? 0}', Icons.check_circle, Colors.green),
+                  _buildStatCard(t('total_users'), '${_stats!['total_users'] ?? 0}', Icons.people, Colors.blue),
+                  _buildStatCard(t('total_products'), '${_stats!['total_products'] ?? 0}', Icons.inventory, Colors.green),
+                  _buildStatCard(t('total_orders'), '${_stats!['total_orders'] ?? 0}', Icons.shopping_cart, Colors.orange),
+                  _buildStatCard(t('paid_orders'), '${_stats!['paid_orders'] ?? 0}', Icons.attach_money, Colors.purple),
+                  _buildStatCard(t('total_deliveries'), '${_stats!['total_deliveries'] ?? 0}', Icons.local_shipping, Colors.teal),
+                  _buildStatCard(t('delivered'), '${_stats!['delivered'] ?? 0}', Icons.check_circle, Colors.green),
                   if (_stats!['by_status'] != null)
                     ...(_stats!['by_status'] as Map<String, dynamic>).entries.map(
                       (e) => _buildStatCard(
-                        e.key.replaceAll('_', ' ').toUpperCase(),
+                        t('status_${e.key}'),
                         '${e.value}',
                         Icons.label,
                         Colors.blueGrey,

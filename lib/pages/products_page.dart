@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../services/api_service.dart';
 import '../config/api_config.dart';
+import '../l10n/app_localizations.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -59,7 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+              SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
             );
           }
         },
@@ -80,7 +81,7 @@ class _ProductsPageState extends State<ProductsPage> {
           } catch (e) {
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+              SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
             );
           }
         },
@@ -89,13 +90,14 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   void _deleteProduct(int id) {
+    final t = AppLocalizations.of(context).translate;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Delete Product'),
-        content: const Text('Are you sure you want to delete this product?'),
+        title: Text(t('delete_product')),
+        content: Text(t('delete_product_confirm')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(t('cancel'))),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
@@ -105,11 +107,11 @@ class _ProductsPageState extends State<ProductsPage> {
               } catch (e) {
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                  SnackBar(content: Text('${t('error')}: $e'), backgroundColor: Colors.red),
                 );
               }
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(t('delete'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -124,6 +126,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -132,17 +135,17 @@ class _ProductsPageState extends State<ProductsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Products', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(t('products'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               Row(
                 children: [
-                  Text('${_products.length} products', style: const TextStyle(color: Colors.grey)),
+                  Text('${_products.length} ${t('products_count')}', style: const TextStyle(color: Colors.grey)),
                   const SizedBox(width: 16),
-                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData, tooltip: 'Refresh'),
+                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData, tooltip: t('refresh')),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: _addProduct,
                     icon: const Icon(Icons.add),
-                    label: const Text('Add Product'),
+                    label: Text(t('add_product')),
                   ),
                 ],
               ),
@@ -157,9 +160,9 @@ class _ProductsPageState extends State<ProductsPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Error: $_error', style: const TextStyle(color: Colors.red)),
+                    Text('${t('error')}: $_error', style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 16),
-                    ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
+                    ElevatedButton(onPressed: _loadData, child: Text(t('retry'))),
                   ],
                 ),
               ),
@@ -170,17 +173,17 @@ class _ProductsPageState extends State<ProductsPage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    columns: const [
-                      DataColumn(label: Text('ID')),
-                      DataColumn(label: Text('Image')),
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Price')),
-                      DataColumn(label: Text('Count')),
-                      DataColumn(label: Text('Category')),
-                      DataColumn(label: Text('Rating')),
-                      DataColumn(label: Text('Recommended')),
-                      DataColumn(label: Text('Out of Stock')),
-                      DataColumn(label: Text('Actions')),
+                    columns: [
+                      DataColumn(label: Text(t('id'))),
+                      DataColumn(label: Text(t('image'))),
+                      DataColumn(label: Text(t('name'))),
+                      DataColumn(label: Text(t('price'))),
+                      DataColumn(label: Text(t('count'))),
+                      DataColumn(label: Text(t('category'))),
+                      DataColumn(label: Text(t('rating'))),
+                      DataColumn(label: Text(t('recommended'))),
+                      DataColumn(label: Text(t('out_of_stock'))),
+                      DataColumn(label: Text(t('actions'))),
                     ],
                     rows: _products.map((p) {
                       final product = Map<String, dynamic>.from(p);
@@ -259,6 +262,8 @@ class _ProductDialogState extends State<ProductDialog> {
   late TextEditingController _descriptionUzController;
   late TextEditingController _descriptionRuController;
   late TextEditingController _featuresController;
+  late TextEditingController _featuresUzController;
+  late TextEditingController _featuresRuController;
   late TextEditingController _ageOrSizeController;
   int? _categoryId;
   bool _recommended = false;
@@ -284,6 +289,14 @@ class _ProductDialogState extends State<ProductDialog> {
     final features = p?['features'];
     _featuresController = TextEditingController(
       text: features is List ? features.join(', ') : '',
+    );
+    final featuresUz = p?['features_uz'];
+    _featuresUzController = TextEditingController(
+      text: featuresUz is List ? featuresUz.join(', ') : '',
+    );
+    final featuresRu = p?['features_ru'];
+    _featuresRuController = TextEditingController(
+      text: featuresRu is List ? featuresRu.join(', ') : '',
     );
     _ageOrSizeController = TextEditingController(text: p?['age_or_size']?.toString() ?? '');
     _categoryId = p?['category_id'];
@@ -318,15 +331,16 @@ class _ProductDialogState extends State<ProductDialog> {
       if (!mounted) return;
       setState(() => _uploading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('${AppLocalizations.of(context).translate('error')}: $e'), backgroundColor: Colors.red),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return AlertDialog(
-      title: Text(widget.product == null ? 'Add Product' : 'Edit Product'),
+      title: Text(widget.product == null ? t('add_product') : t('edit_product')),
       content: SizedBox(
         width: 600,
         child: SingleChildScrollView(
@@ -352,33 +366,33 @@ class _ProductDialogState extends State<ProductDialog> {
                 child: OutlinedButton.icon(
                   onPressed: _uploading ? null : _pickAndUploadImage,
                   icon: const Icon(Icons.upload),
-                  label: Text(_imageUrl != null ? 'Change Image' : 'Upload Image'),
+                  label: Text(_imageUrl != null ? t('change_image') : t('upload_image')),
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Name *')),
+              TextField(controller: _nameController, decoration: InputDecoration(labelText: t('name_required'))),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(child: TextField(controller: _nameUzController, decoration: const InputDecoration(labelText: 'Name (UZ)'))),
+                  Expanded(child: TextField(controller: _nameUzController, decoration: InputDecoration(labelText: t('name_uz')))),
                   const SizedBox(width: 12),
-                  Expanded(child: TextField(controller: _nameRuController, decoration: const InputDecoration(labelText: 'Name (RU)'))),
+                  Expanded(child: TextField(controller: _nameRuController, decoration: InputDecoration(labelText: t('name_ru')))),
                 ],
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(child: TextField(controller: _priceController, decoration: const InputDecoration(labelText: 'Price *'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(controller: _priceController, decoration: InputDecoration(labelText: t('price_required')), keyboardType: TextInputType.number)),
                   const SizedBox(width: 12),
-                  Expanded(child: TextField(controller: _countController, decoration: const InputDecoration(labelText: 'Count'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(controller: _countController, decoration: InputDecoration(labelText: t('count')), keyboardType: TextInputType.number)),
                 ],
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<int?>(
                 initialValue: _categoryId,
-                decoration: const InputDecoration(labelText: 'Category'),
+                decoration: InputDecoration(labelText: t('category')),
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('None')),
+                  DropdownMenuItem(value: null, child: Text(t('none'))),
                   ...widget.categories.map((c) => DropdownMenuItem(
                         value: c['id'] as int,
                         child: Text(c['name'] ?? ''),
@@ -387,22 +401,30 @@ class _ProductDialogState extends State<ProductDialog> {
                 onChanged: (v) => setState(() => _categoryId = v),
               ),
               const SizedBox(height: 12),
-              TextField(controller: _descriptionController, decoration: const InputDecoration(labelText: 'Description'), maxLines: 3),
+              TextField(controller: _descriptionController, decoration: InputDecoration(labelText: t('description')), maxLines: 3),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(child: TextField(controller: _descriptionUzController, decoration: const InputDecoration(labelText: 'Description (UZ)'), maxLines: 2)),
+                  Expanded(child: TextField(controller: _descriptionUzController, decoration: InputDecoration(labelText: t('description_uz')), maxLines: 2)),
                   const SizedBox(width: 12),
-                  Expanded(child: TextField(controller: _descriptionRuController, decoration: const InputDecoration(labelText: 'Description (RU)'), maxLines: 2)),
+                  Expanded(child: TextField(controller: _descriptionRuController, decoration: InputDecoration(labelText: t('description_ru')), maxLines: 2)),
                 ],
               ),
               const SizedBox(height: 12),
-              TextField(controller: _featuresController, decoration: const InputDecoration(labelText: 'Features (comma separated)')),
+              TextField(controller: _featuresController, decoration: InputDecoration(labelText: t('features_comma'))),
               const SizedBox(height: 12),
-              TextField(controller: _ageOrSizeController, decoration: const InputDecoration(labelText: 'Age or Size'), keyboardType: TextInputType.number),
+              Row(
+                children: [
+                  Expanded(child: TextField(controller: _featuresUzController, decoration: InputDecoration(labelText: t('features_uz')))),
+                  const SizedBox(width: 12),
+                  Expanded(child: TextField(controller: _featuresRuController, decoration: InputDecoration(labelText: t('features_ru')))),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TextField(controller: _ageOrSizeController, decoration: InputDecoration(labelText: t('age_or_size')), keyboardType: TextInputType.number),
               const SizedBox(height: 12),
               SwitchListTile(
-                title: const Text('Recommended'),
+                title: Text(t('recommended')),
                 value: _recommended,
                 onChanged: (v) => setState(() => _recommended = v),
               ),
@@ -411,14 +433,14 @@ class _ProductDialogState extends State<ProductDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(t('cancel'))),
         ElevatedButton(
           onPressed: () {
             final name = _nameController.text.trim();
             final price = double.tryParse(_priceController.text);
             if (name.isEmpty || price == null || price <= 0) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Name and valid price are required')),
+                SnackBar(content: Text(t('name_price_required'))),
               );
               return;
             }
@@ -444,17 +466,26 @@ class _ProductDialogState extends State<ProductDialog> {
             if (nameRu.isNotEmpty) data['name_ru'] = nameRu;
             if (descUz.isNotEmpty) data['description_uz'] = descUz;
             if (descRu.isNotEmpty) data['description_ru'] = descRu;
+            final featuresUz = _featuresUzController.text.trim().isEmpty
+                ? <String>[]
+                : _featuresUzController.text.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+            final featuresRu = _featuresRuController.text.trim().isEmpty
+                ? <String>[]
+                : _featuresRuController.text.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+            if (featuresUz.isNotEmpty) data['features_uz'] = featuresUz;
+            if (featuresRu.isNotEmpty) data['features_ru'] = featuresRu;
 
             Navigator.pop(context);
             widget.onSave(data);
           },
-          child: const Text('Save'),
+          child: Text(t('save')),
         ),
       ],
     );
   }
 
   Widget _buildImagePreview() {
+    final t = AppLocalizations.of(context).translate;
     // Show picked file bytes if available
     if (_pickedFile?.bytes != null) {
       return Image.memory(_pickedFile!.bytes!, fit: BoxFit.contain);
@@ -465,22 +496,22 @@ class _ProductDialogState extends State<ProductDialog> {
       return Image.network(
         url,
         fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => const Center(
+        errorBuilder: (_, __, ___) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [Icon(Icons.broken_image, size: 48, color: Colors.grey), Text('Failed to load')],
+            children: [const Icon(Icons.broken_image, size: 48, color: Colors.grey), Text(t('failed_to_load'))],
           ),
         ),
       );
     }
     // No image
-    return const Center(
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.image, size: 48, color: Colors.grey),
-          SizedBox(height: 8),
-          Text('No image', style: TextStyle(color: Colors.grey)),
+          const Icon(Icons.image, size: 48, color: Colors.grey),
+          const SizedBox(height: 8),
+          Text(t('no_image'), style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );

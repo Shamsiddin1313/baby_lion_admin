@@ -1,0 +1,121 @@
+const Map<String, String> stringsUz = {
+  // Common
+  'app_title': 'Baby Lion Admin',
+  'login': 'Kirish',
+  'logout': 'Chiqish',
+  'cancel': 'Bekor qilish',
+  'delete': "O'chirish",
+  'save': 'Saqlash',
+  'retry': 'Qayta urinish',
+  'refresh': 'Yangilash',
+  'error': 'Xatolik',
+  'actions': 'Amallar',
+  'id': 'ID',
+  'name': 'Nomi',
+  'none': 'Tanlanmagan',
+
+  // Login
+  'admin_token': 'Administrator tokeni',
+  'please_enter_token': 'Iltimos, tokenni kiriting',
+  'invalid_token': "Noto'g'ri token",
+  'connection_error': 'Ulanish xatosi',
+
+  // Navigation
+  'dashboard': 'Boshqaruv paneli',
+  'users': 'Foydalanuvchilar',
+  'products': 'Mahsulotlar',
+  'categories': 'Kategoriyalar',
+  'orders': 'Buyurtmalar',
+  'notifications': 'Bildirishnomalar',
+
+  // Dashboard overview
+  'total_users': 'Jami foydalanuvchilar',
+  'total_products': 'Jami mahsulotlar',
+  'total_orders': 'Jami buyurtmalar',
+  'paid_orders': "To'langan buyurtmalar",
+  'total_deliveries': 'Jami yetkazishlar',
+  'delivered': 'Yetkazilgan',
+
+  // Products
+  'add_product': "Mahsulot qo'shish",
+  'edit_product': 'Mahsulotni tahrirlash',
+  'delete_product': "Mahsulotni o'chirish",
+  'delete_product_confirm': "Ushbu mahsulotni o'chirishni xohlaysizmi?",
+  'products_count': 'mahsulot',
+  'image': 'Rasm',
+  'price': 'Narxi',
+  'count': 'Soni',
+  'category': 'Kategoriya',
+  'rating': 'Reyting',
+  'recommended': 'Tavsiya etilgan',
+  'out_of_stock': 'Tugagan',
+  'name_required': 'Nomi *',
+  'name_uz': 'Nomi (UZ)',
+  'name_ru': 'Nomi (RU)',
+  'price_required': 'Narxi *',
+  'description': 'Tavsif',
+  'description_uz': 'Tavsif (UZ)',
+  'description_ru': 'Tavsif (RU)',
+  'features_comma': 'Xususiyatlar (vergul bilan)',
+  'features_uz': 'Xususiyatlar UZ (vergul bilan)',
+  'features_ru': 'Xususiyatlar RU (vergul bilan)',
+  'age_or_size': "Yosh yoki o'lcham",
+  'name_price_required': "Nomi va to'g'ri narx kiritilishi shart",
+  'upload_image': 'Rasm yuklash',
+  'change_image': "Rasmni o'zgartirish",
+  'no_image': "Rasm yo'q",
+  'failed_to_load': "Yuklab bo'lmadi",
+
+  // Categories
+  'add_category': "Kategoriya qo'shish",
+  'edit_category': 'Kategoriyani tahrirlash',
+  'delete_category': "Kategoriyani o'chirish",
+  'delete_category_confirm':
+      "Ishonchingiz kommi? Bu kategoriadagi barcha mahsulotlar ham o'chiriladi.",
+  'categories_count': 'kategoriya',
+  'icon': 'Ikonka',
+  'upload_icon': 'Ikonka yuklash',
+  'change_icon': "Ikonkani o'zgartirish",
+  'no_icon': "Ikonka yo'q",
+  'name_is_required': 'Nomi kiritilishi shart',
+
+  // Users
+  'users_count': 'foydalanuvchi',
+  'phone': 'Telefon',
+  'birthday': "Tug'ilgan sana",
+
+  // Orders
+  'orders_count': 'buyurtma',
+  'all_statuses': 'Barcha statuslar',
+  'order_number': 'Buyurtma №',
+  'user': 'Foydalanuvchi',
+  'items': 'Mahsulotlar',
+  'total': 'Jami',
+  'status': 'Status',
+  'payment': "To'lov",
+  'created': 'Yaratilgan',
+  'update_order_status': 'Buyurtma statusini yangilash',
+  'status_updated_to': 'Status yangilandi:',
+  'update_status': 'Statusni yangilash',
+
+  // Notifications
+  'send_notification': 'Bildirishnoma yuborish',
+  'broadcast_subtitle':
+      'Firebase orqali barcha foydalanuvchilarga push-bildirishnoma yuborish',
+  'notification_title': 'Bildirishnoma sarlavhasi',
+  'notification_message': 'Bildirishnoma matni',
+  'title_message_required': 'Sarlavha va matn kiritilishi shart',
+  'notification_sent_to': 'Bildirishnoma yuborildi:',
+  'devices': 'qurilma',
+  'sending': 'Yuborilmoqda...',
+
+  // Order statuses
+  'status_pending': 'KUTILMOQDA',
+  'status_waiting_payment': "TO'LOV KUTILMOQDA",
+  'status_paid': "TO'LANGAN",
+  'status_preparing': 'TAYYORLANMOQDA',
+  'status_on_the_way': "YO'LDA",
+  'status_delivered': 'YETKAZILGAN',
+  'status_canceled': 'BEKOR QILINGAN',
+  'status_cancelled': 'BEKOR QILINGAN',
+};

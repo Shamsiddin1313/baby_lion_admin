@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     final token = _tokenController.text.trim();
     if (token.isEmpty) {
-      setState(() => _error = 'Please enter admin token');
+      setState(() => _error = AppLocalizations.of(context).translate('please_enter_token'));
       return;
     }
 
@@ -35,11 +36,11 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(builder: (_) => const DashboardPage()),
         );
       } else {
-        setState(() => _error = 'Invalid admin token');
+        setState(() => _error = AppLocalizations.of(context).translate('invalid_token'));
       }
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = 'Connection error: $e');
+      setState(() => _error = '${AppLocalizations.of(context).translate('connection_error')}: $e');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -47,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Scaffold(
       body: Center(
         child: Container(
@@ -61,18 +63,18 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Icon(Icons.admin_panel_settings, size: 64, color: Color(0xFF2C3E50)),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Baby Lion Admin',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Text(
+                    t('app_title'),
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 32),
                   TextField(
                     controller: _tokenController,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Admin Token',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.vpn_key),
+                    decoration: InputDecoration(
+                      labelText: t('admin_token'),
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.vpn_key),
                     ),
                     onSubmitted: (_) => _login(),
                   ),
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                               height: 24,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Login'),
+                          : Text(t('login')),
                     ),
                   ),
                 ],

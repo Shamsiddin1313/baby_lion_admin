@@ -1,0 +1,121 @@
+const Map<String, String> stringsRu = {
+  // Common
+  'app_title': 'Baby Lion Админ',
+  'login': 'Войти',
+  'logout': 'Выйти',
+  'cancel': 'Отмена',
+  'delete': 'Удалить',
+  'save': 'Сохранить',
+  'retry': 'Повторить',
+  'refresh': 'Обновить',
+  'error': 'Ошибка',
+  'actions': 'Действия',
+  'id': 'ID',
+  'name': 'Название',
+  'none': 'Не выбрано',
+
+  // Login
+  'admin_token': 'Токен администратора',
+  'please_enter_token': 'Пожалуйста, введите токен',
+  'invalid_token': 'Неверный токен',
+  'connection_error': 'Ошибка подключения',
+
+  // Navigation
+  'dashboard': 'Панель управления',
+  'users': 'Пользователи',
+  'products': 'Товары',
+  'categories': 'Категории',
+  'orders': 'Заказы',
+  'notifications': 'Уведомления',
+
+  // Dashboard overview
+  'total_users': 'Всего пользователей',
+  'total_products': 'Всего товаров',
+  'total_orders': 'Всего заказов',
+  'paid_orders': 'Оплаченные заказы',
+  'total_deliveries': 'Всего доставок',
+  'delivered': 'Доставлено',
+
+  // Products
+  'add_product': 'Добавить товар',
+  'edit_product': 'Редактировать товар',
+  'delete_product': 'Удалить товар',
+  'delete_product_confirm': 'Вы уверены, что хотите удалить этот товар?',
+  'products_count': 'товаров',
+  'image': 'Изображение',
+  'price': 'Цена',
+  'count': 'Количество',
+  'category': 'Категория',
+  'rating': 'Рейтинг',
+  'recommended': 'Рекомендуемое',
+  'out_of_stock': 'Нет в наличии',
+  'name_required': 'Название *',
+  'name_uz': 'Название (UZ)',
+  'name_ru': 'Название (RU)',
+  'price_required': 'Цена *',
+  'description': 'Описание',
+  'description_uz': 'Описание (UZ)',
+  'description_ru': 'Описание (RU)',
+  'features_comma': 'Свойства (через запятую)',
+  'features_uz': 'Свойства UZ (через запятую)',
+  'features_ru': 'Свойства RU (через запятую)',
+  'age_or_size': 'Возраст или размер',
+  'name_price_required': 'Название и корректная цена обязательны',
+  'upload_image': 'Загрузить изображение',
+  'change_image': 'Изменить изображение',
+  'no_image': 'Нет изображения',
+  'failed_to_load': 'Не удалось загрузить',
+
+  // Categories
+  'add_category': 'Добавить категорию',
+  'edit_category': 'Редактировать категорию',
+  'delete_category': 'Удалить категорию',
+  'delete_category_confirm':
+      'Вы уверены? Все товары в этой категории тоже будут удалены.',
+  'categories_count': 'категорий',
+  'icon': 'Иконка',
+  'upload_icon': 'Загрузить иконку',
+  'change_icon': 'Изменить иконку',
+  'no_icon': 'Нет иконки',
+  'name_is_required': 'Название обязательно',
+
+  // Users
+  'users_count': 'пользователей',
+  'phone': 'Телефон',
+  'birthday': 'Дата рождения',
+
+  // Orders
+  'orders_count': 'заказов',
+  'all_statuses': 'Все статусы',
+  'order_number': 'Заказ №',
+  'user': 'Пользователь',
+  'items': 'Товары',
+  'total': 'Итого',
+  'status': 'Статус',
+  'payment': 'Оплата',
+  'created': 'Создан',
+  'update_order_status': 'Обновить статус заказа',
+  'status_updated_to': 'Статус обновлён на',
+  'update_status': 'Обновить статус',
+
+  // Notifications
+  'send_notification': 'Отправить уведомление',
+  'broadcast_subtitle':
+      'Отправить push-уведомление всем пользователям через Firebase',
+  'notification_title': 'Заголовок уведомления',
+  'notification_message': 'Текст уведомления',
+  'title_message_required': 'Заголовок и текст обязательны',
+  'notification_sent_to': 'Уведомление отправлено на',
+  'devices': 'устройств',
+  'sending': 'Отправка...',
+
+  // Order statuses
+  'status_pending': 'В ОЖИДАНИИ',
+  'status_waiting_payment': 'ОЖИДАНИЕ ОПЛАТЫ',
+  'status_paid': 'ОПЛАЧЕНО',
+  'status_preparing': 'ПОДГОТОВКА',
+  'status_on_the_way': 'В ПУТИ',
+  'status_delivered': 'ДОСТАВЛЕНО',
+  'status_canceled': 'ОТМЕНЕНО',
+  'status_cancelled': 'ОТМЕНЕНО',
+};

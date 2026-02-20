@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
@@ -52,11 +53,16 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
+  String _translateStatus(String status) {
+    return AppLocalizations.of(context).translate('status_$status');
+  }
+
   void _updateStatus(int orderId, String currentStatus) {
+    final t = AppLocalizations.of(context).translate;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Update Order Status'),
+        title: Text(t('update_order_status')),
         content: SizedBox(
           width: 300,
           child: Column(
@@ -64,7 +70,7 @@ class _OrdersPageState extends State<OrdersPage> {
             children: _statuses.map((status) {
               final isSelected = status == currentStatus;
               return ListTile(
-                title: Text(status.replaceAll('_', ' ').toUpperCase()),
+                title: Text(_translateStatus(status)),
                 leading: Icon(
                   isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
                   color: isSelected ? Colors.blue : null,
@@ -77,12 +83,12 @@ class _OrdersPageState extends State<OrdersPage> {
                     _loadOrders();
                     if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Status updated to $status')),
+                      SnackBar(content: Text('${t('status_updated_to')} ${_translateStatus(status)}')),
                     );
                   } catch (e) {
                     if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                      SnackBar(content: Text('${t('error')}: $e'), backgroundColor: Colors.red),
                     );
                   }
                 },
@@ -91,7 +97,7 @@ class _OrdersPageState extends State<OrdersPage> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(t('cancel'))),
         ],
       ),
     );
@@ -117,6 +123,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -125,17 +132,17 @@ class _OrdersPageState extends State<OrdersPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Orders', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(t('orders'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   DropdownButton<String?>(
                     value: _statusFilter,
-                    hint: const Text('All statuses'),
+                    hint: Text(t('all_statuses')),
                     items: [
-                      const DropdownMenuItem(value: null, child: Text('All statuses')),
+                      DropdownMenuItem(value: null, child: Text(t('all_statuses'))),
                       ..._statuses.map((s) => DropdownMenuItem(
                             value: s,
-                            child: Text(s.replaceAll('_', ' ').toUpperCase()),
+                            child: Text(_translateStatus(s)),
                           )),
                     ],
                     onChanged: (v) {
@@ -144,9 +151,9 @@ class _OrdersPageState extends State<OrdersPage> {
                     },
                   ),
                   const SizedBox(width: 16),
-                  Text('${_orders.length} orders', style: const TextStyle(color: Colors.grey)),
+                  Text('${_orders.length} ${t('orders_count')}', style: const TextStyle(color: Colors.grey)),
                   const SizedBox(width: 16),
-                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadOrders, tooltip: 'Refresh'),
+                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadOrders, tooltip: t('refresh')),
                 ],
               ),
             ],
@@ -160,9 +167,9 @@ class _OrdersPageState extends State<OrdersPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Error: $_error', style: const TextStyle(color: Colors.red)),
+                    Text('${t('error')}: $_error', style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 16),
-                    ElevatedButton(onPressed: _loadOrders, child: const Text('Retry')),
+                    ElevatedButton(onPressed: _loadOrders, child: Text(t('retry'))),
                   ],
                 ),
               ),
@@ -173,16 +180,16 @@ class _OrdersPageState extends State<OrdersPage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    columns: const [
-                      DataColumn(label: Text('ID')),
-                      DataColumn(label: Text('Order #')),
-                      DataColumn(label: Text('User')),
-                      DataColumn(label: Text('Items')),
-                      DataColumn(label: Text('Total')),
-                      DataColumn(label: Text('Status')),
-                      DataColumn(label: Text('Payment')),
-                      DataColumn(label: Text('Created')),
-                      DataColumn(label: Text('Actions')),
+                    columns: [
+                      DataColumn(label: Text(t('id'))),
+                      DataColumn(label: Text(t('order_number'))),
+                      DataColumn(label: Text(t('user'))),
+                      DataColumn(label: Text(t('items'))),
+                      DataColumn(label: Text(t('total'))),
+                      DataColumn(label: Text(t('status'))),
+                      DataColumn(label: Text(t('payment'))),
+                      DataColumn(label: Text(t('created'))),
+                      DataColumn(label: Text(t('actions'))),
                     ],
                     rows: _orders.map((o) {
                       final order = Map<String, dynamic>.from(o);
@@ -206,7 +213,7 @@ class _OrdersPageState extends State<OrdersPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              status.replaceAll('_', ' ').toUpperCase(),
+                              _translateStatus(status),
                               style: TextStyle(color: _statusColor(status), fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                           ),
@@ -217,7 +224,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
                             onPressed: () => _updateStatus(order['id'], status),
-                            tooltip: 'Update status',
+                            tooltip: t('update_status'),
                           ),
                         ),
                       ]);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../l10n/app_localizations.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -14,12 +15,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
   bool _sending = false;
 
   Future<void> _sendNotification() async {
+    final t = AppLocalizations.of(context).translate;
     final title = _titleController.text.trim();
     final message = _messageController.text.trim();
 
     if (title.isEmpty || message.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Title and message are required')),
+        SnackBar(content: Text(t('title_message_required'))),
       );
       return;
     }
@@ -30,14 +32,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
       final result = await ApiService().broadcastNotification(title, message);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Notification sent to ${result['sent_to']} devices')),
+        SnackBar(content: Text('${t('notification_sent_to')} ${result['sent_to']} ${t('devices')}')),
       );
       _titleController.clear();
       _messageController.clear();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('${t('error')}: $e'), backgroundColor: Colors.red),
       );
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -46,14 +48,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context).translate;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Send Notification', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+          Text(t('send_notification'), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          const Text('Broadcast push notification to all users via Firebase', style: TextStyle(color: Colors.grey)),
+          Text(t('broadcast_subtitle'), style: const TextStyle(color: Colors.grey)),
           const SizedBox(height: 24),
           Card(
             child: Padding(
@@ -62,18 +65,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 children: [
                   TextField(
                     controller: _titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Notification Title',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: t('notification_title'),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _messageController,
                     maxLines: 5,
-                    decoration: const InputDecoration(
-                      labelText: 'Notification Message',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: t('notification_message'),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -85,7 +88,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       icon: _sending
                           ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.send),
-                      label: Text(_sending ? 'Sending...' : 'Send Notification'),
+                      label: Text(_sending ? t('sending') : t('send_notification')),
                     ),
                   ),
                 ],
