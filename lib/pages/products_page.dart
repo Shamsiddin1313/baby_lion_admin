@@ -171,8 +171,9 @@ class _ProductsPageState extends State<ProductsPage> {
             Expanded(
               child: Card(
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
                     columns: [
                       DataColumn(label: Text(t('id'))),
                       DataColumn(label: Text(t('image'))),
@@ -231,6 +232,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         )),
                       ]);
                     }).toList(),
+                    ),
                   ),
                 ),
               ),

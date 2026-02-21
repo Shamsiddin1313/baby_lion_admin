@@ -86,8 +86,8 @@ class _UsersPageState extends State<UsersPage> {
             Expanded(
               child: Card(
                 child: SingleChildScrollView(
-                  child: SizedBox(
-                    width: double.infinity,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
                         DataColumn(label: Text(t('id'))),
